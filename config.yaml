@@ -1,0 +1,114 @@
+# ============================================================
+# Project Configuration
+# All paths, hyperparameters, and business assumptions here.
+# Nothing hardcoded in source files.
+# ============================================================
+
+random_seed: 42
+
+paths:
+  raw_data: "data/raw/census-bureau.data"
+  raw_columns: "data/raw/census-bureau.columns"
+  processed_dir: "data/processed/"
+  results_figures: "results/figures/"
+  results_tables: "results/tables/"
+  results_models: "results/models/"
+
+data:
+  target_column: "label"
+  weight_column: "weight"
+  positive_label: "50000+."
+  negative_label: "- 50000."
+  missing_value: "?"
+  strip_whitespace: true           # strip whitespace in all string columns (incl. labels) before mapping
+
+  drop_columns:
+    - "year"                       # survey collection year, not a personal attribute;
+                                   # encoding macro conditions would hurt generalisability
+    - "detailed industry recode"   # high-cardinality, sparse; redundant with major industry code
+    - "detailed occupation recode" # same reasoning; risk of overfitting after one-hot encoding
+
+  migration_columns:
+    - "migration code-change in msa"
+    - "migration code-change in reg"
+    - "migration code-move within reg"
+    - "migration prev res in sunbelt"
+  # Missing in migration columns likely means "did not move" — not truly missing.
+  # Strategy: create binary migration_missing_flag first, then fill ? with "Unknown".
+  # Missingness itself may carry predictive signal.
+
+  skewed_numeric_columns:
+    - "wage per hour"
+    - "capital gains"
+    - "capital losses"
+    - "dividends from stocks"
+
+split:
+  train_size: 0.70
+  val_size: 0.15
+  test_size: 0.15
+  stratify: true                   # preserve class ratio across all three splits
+
+features:
+  log_transform_skewed_numeric: true
+  log_transform_method: "log1p"    # safe with zeros and reduces heavy-tail leverage
+
+evaluation:
+  primary_metrics:
+    - weighted_roc_auc
+    - weighted_pr_auc
+  threshold_metrics:
+    - weighted_precision
+    - weighted_recall
+    - weighted_f1
+  calibration_metrics:
+    - brier_score
+
+models:
+  use_sample_weight: true          # use census weight column during training
+                                   # this accounts for stratified sampling design
+
+  logistic_regression:
+    max_iter: 1000
+    solver: "saga"
+    penalty: "l2"
+    class_weight: null
+    C: 1.0
+
+  random_forest:
+    n_estimators: 300
+    max_depth: 15
+    min_samples_leaf: 10
+    class_weight: null             # avoid double-correcting imbalance on top of sample weights
+    n_jobs: -1
+
+  xgboost:
+    n_estimators: 300
+    max_depth: 6
+    learning_rate: 0.05
+    subsample: 0.8
+    colsample_bytree: 0.8
+    reg_lambda: 1.0
+    tree_method: "hist"
+    scale_pos_weight: null
+    eval_metric: "auc"
+    n_jobs: -1
+
+# Business assumptions — client can adjust these without touching code
+profit_simulation:
+  contact_cost: 1.0                # cost per person contacted ($/£ per outreach)
+  revenue_per_positive: 50.0       # expected revenue if a >50K person converts
+  assumed_conversion_rate: 0.10    # realistic base-rate; used in ROI simulation
+  sensitivity_range: [0.05, 0.20]  # sweep conversion rate to test robustness of recommendation
+
+segmentation:
+  use_pca: true                    # dimensionality reduction before clustering
+  dimensionality_reduction: "svd"  # TruncatedSVD for sparse one-hot matrices; PCA if dense
+  pca_variance_threshold: 0.90     # retain components explaining 90% variance (for PCA path)
+  n_clusters_range: [3, 8]         # elbow/silhouette search range
+  n_clusters_global: 6             # full population segmentation
+  n_clusters_premium: 3            # segmentation within >50K group only
+  premium_filter:
+    type: "probability_threshold"
+    threshold: 0.1774                
+  n_init: 20
