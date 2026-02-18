@@ -1,0 +1,7 @@
+cluster,weighted_size,pct_of_population,high_income_rate,mean_age,mean_wage per hour,mean_capital gains,mean_capital losses,mean_dividends from stocks,mean_weeks worked in year,mean_num persons worked for employer
+0,86640286.0,24.95,9.42,30.95,0.84,0.45,0.24,0.59,50.86,3.92
+1,100984743.0,29.08,0.01,9.29,0.04,0.01,0.01,0.03,0.38,0.18
+2,47479581.0,13.67,2.36,71.28,0.03,0.39,0.12,1.22,0.88,0.23
+3,20336853.0,5.86,1.28,27.79,0.66,0.19,0.17,0.32,24.54,3.64
+4,28904996.0,8.32,0.69,39.46,0.14,0.12,0.05,0.46,1.5,0.6
+5,62899434.0,18.11,19.85,51.85,0.68,0.75,0.32,1.29,50.25,3.8
