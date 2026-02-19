@@ -182,7 +182,9 @@ python -m src.segmentation.cluster
 
 All hyperparameters, file paths, and business assumptions are stored in:
 
+```bash
 config.yaml
+```
 
 Nothing important is hardcoded.
 
