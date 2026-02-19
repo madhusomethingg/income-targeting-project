@@ -38,6 +38,7 @@ We build:
 
 ## Project Structure
 
+```
 income-targeting-project/
 │
 ├── data/
@@ -47,15 +48,21 @@ income-targeting-project/
 │
 ├── src/
 │   ├── data/
+│   │   ├── loader.py
+│   │   └── cleaner.py
 │   ├── features/
+│   │   └── engineer.py
 │   ├── models/
+│   │   ├── train.py
+│   │   └── profit_simulation.py
 │   ├── evaluation/
+│   │   └── metrics.py
 │   └── segmentation/
+│       └── cluster.py
 │
 ├── notebooks/
-│   ├── 01_exploratory_analysis.ipynb
-│   ├── 02_model_diagnostics.ipynb
-│   └── 03_segmentation_analysis.ipynb
+│   ├── exploratory_analysis.ipynb
+│   └── model_diagnostics.ipynb
 │
 ├── results/
 │   ├── figures/
@@ -65,35 +72,69 @@ income-targeting-project/
 ├── config.yaml
 ├── requirements.txt
 └── README.md
+```
 
+## Setup
 
-## How to Run the Project
+**1. Clone the repository**
 
-Make sure you are in the project root directory.
+```bash
+git clone https://github.com/madhusomethingg/income-targeting-project.git
+cd income-targeting-project
+```
 
-- Step 1 — Train models
+**2. Create and activate a virtual environment**
 
+```bash
+python -m venv venv
+source venv/bin/activate
+```
+
+**3. Install dependencies**
+
+```bash
+pip install -r requirements.txt
+```
+
+**4. Add the data files**
+
+Place `census-bureau.data` and `census-bureau.columns` inside `data/raw/`. These files are excluded from version control due to size.
+
+---
+
+## How to Run
+
+All commands should be run from the project root with the virtual environment active.
+
+**Step 1 — Train all models**
+
+```bash
 python -m src.models.train
+```
 
-This trains Logistic Regression, Random Forest, and XGBoost.
+Trains Logistic Regression, Random Forest, and XGBoost. Saves fitted models to `results/models/`.
 
-- Step 2 — Evaluate models
+**Step 2 — Evaluate models**
 
+```bash
 python -m src.evaluation.metrics
+```
 
-This calculates weighted ROC-AUC, PR-AUC, F1, and Brier score.
+Calculates weighted ROC-AUC, PR-AUC, F1, and Brier score on validation and test sets. Saves results to `results/tables/`.
 
-- Step 3 — Run profit simulation
+**Step 3 — Run profit simulation**
 
+```bash
 python -m src.models.profit_simulation
+```
 
-This finds the best classification threshold based on expected profit.
+Finds the profit-optimising classification threshold using the validation set. Saves the optimal threshold and profit curve to `results/tables/`.
 
-- Step 4 — Run segmentation
+**Step 4 — Run segmentation**
 
+```bash
 python -m src.segmentation.cluster
-
-This builds both global and premium customer segments.
+```
 
 ## Notebooks
 
