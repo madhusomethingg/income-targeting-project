@@ -66,6 +66,7 @@ income-targeting-project/
 ├── requirements.txt
 └── README.md
 
+
 ## How to Run the Project
 
 Make sure you are in the project root directory.
@@ -120,15 +121,21 @@ This builds both global and premium customer segments.
 
 ## Results Summary
 
-- **Best model**: XGBoost
+**Best Model: XGBoost**
 
-- **ROC-AUC**: 0.9512
+- ROC-AUC: 0.9475
 
-- **PR-AUC**: 0.6673
+- PR-AUC: 0.6488
 
-- **Optimal threshold**: 0.1774
+- F1 Score: 0.5464
 
-- **Population contacted**: ~9.7%
+- Brier Score: 0.0352
+
+- Optimal Threshold (validation profit): 0.1922 (~0.19)
+
+- Population Contacted at Optimal Threshold: ~9.3%
+
+- Profit Improvement vs Default 0.5 Threshold: +31.6%
 
 ## Configuration
 
