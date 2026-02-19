@@ -27,6 +27,11 @@ data:
                                    # encoding macro conditions would hurt generalisability
     - "detailed industry recode"   # high-cardinality, sparse; redundant with major industry code
     - "detailed occupation recode" # same reasoning; risk of overfitting after one-hot encoding
+    - weight                       # handled separately
+    - label                        # handled separately
+    - race            # excluded: fairness — reflects structural inequality not individual earning capacity
+    - sex             # excluded: fairness — protected characteristic
+    - hispanic origin # excluded: fairness — correlated with race, same concern
 
   migration_columns:
     - "migration code-change in msa"
