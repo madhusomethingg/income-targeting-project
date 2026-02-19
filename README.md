@@ -100,7 +100,6 @@ pip install -r requirements.txt
 
 Place `census-bureau.data` and `census-bureau.columns` inside `data/raw/`. These files are excluded from version control due to size.
 
----
 
 ## How to Run
 
