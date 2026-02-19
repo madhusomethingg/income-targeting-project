@@ -61,8 +61,9 @@ income-targeting-project/
 │       └── cluster.py
 │
 ├── notebooks/
-│   ├── exploratory_analysis.ipynb
+│   ├── exploratory_analysis.ipynb 
 │   └── model_diagnostics.ipynb
+    └── segmentation_analysis.ipynb
 │
 ├── results/
 │   ├── figures/
